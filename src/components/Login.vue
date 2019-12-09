@@ -1,0 +1,81 @@
+<template>
+  <div class="login">
+    <el-input v-model="username" placeholder="请输入用户名"/>
+    <el-input v-model="password" placeholder="请输入密码" show-password/>
+    <el-button id="login_button" type="primary" @click="login()">立即登录</el-button>
+    <router-link to="/reg">
+      <el-link id="reg_link" :underline="false" type="primary">没有账号,去注册?</el-link>
+    </router-link>
+  </div>
+
+</template>
+
+<script>
+  import axios from 'axios'
+  import {base_url} from "../assets/js/base";
+
+  export default {
+    name: 'Login',
+    data () {
+      return {
+        username: '',
+        password: '',
+        login_url: base_url + 'user/login'
+      }
+    },
+    methods: {
+      login() {
+        if (this.username == '' || this.password == '') {
+          this.errorMsg("缺少相关参数");
+          return;
+        }
+        var url = this.login_url + "?username=" + this.username + "&password=" + this.password;
+        axios.get(url)
+        .then(response => {
+          console.log(response.data)
+          if (response.data.code != 0) {
+            this.errorMsg(response.data.msg);
+          } else {
+            //跳转到主页面
+            this.$router.push({ path: '/main' })
+          }
+        })
+        .catch(error => {
+          this.errorMsg("网络错误,暂时不能访问")
+        })
+      },
+      successMsg(msg) {
+        this.$message({
+          showClose: true,
+          message: msg,
+          type: 'success',
+          duration: 2000
+        });
+      },
+      errorMsg(msg) {
+        this.$message({
+          showClose: true,
+          message: msg,
+          type: 'error',
+          duration: 2000
+        });
+      }
+    }
+  }
+</script>
+
+<!-- Add "scoped" attribute to limit CSS to this component only -->
+<style>
+  .login {
+    width: 300px;
+    margin: 250px auto 0 auto;
+  }
+  #login_button {
+    width: 300px;
+    margin-top: 10px;
+  }
+  #reg_link {
+    width: 300px;
+    margin-top: 10px;
+  }
+</style>
