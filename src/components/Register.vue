@@ -1,15 +1,16 @@
 <template>
-  <div class="register">
-    <el-input v-model="username" placeholder="请输入用户名"/>
-    <el-input v-model="password" placeholder="请输入密码" show-password/>
-    <el-input v-model="email" placeholder="请输入邮箱"/>
-    <div class="code-container">
-      <el-input id="code" v-model="code" placeholder="请输入验证码"/>
-      <el-button id="send_button" :disabled="is_forbidden" type="primary" @click="sendCode()">{{button_msg}}</el-button><br>
+  <div class="register-container">
+    <div class="register">
+      <el-input v-model="username" placeholder="请输入用户名"/>
+      <el-input v-model="password" placeholder="请输入密码" show-password/>
+      <el-input v-model="email" placeholder="请输入邮箱"/>
+      <div class="code-container">
+        <el-input id="code" v-model="code" placeholder="请输入验证码"/>
+        <el-button id="send_button" :disabled="is_forbidden" type="primary" @click="sendCode()">{{button_msg}}</el-button><br>
+      </div>
+      <el-button id="reg_button" type="primary" @click="reg()">立即注册</el-button>
     </div>
-    <el-button id="reg_button" type="primary" @click="reg()">立即注册</el-button>
   </div>
-
 </template>
 
 <script>
@@ -115,13 +116,18 @@
 </script>
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
-<style>
+<style scoped>
+  .register-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 100vw;
+    height: 100vh;
+    background: url("../assets/images/background.jpeg") no-repeat center center;
+    background-size: cover;
+  }
   .register {
     width: 300px;
-    margin: 220px auto 0 auto;
-  }
-  #code {
-    flex: 1;
   }
   .code-container {
     display: flex;

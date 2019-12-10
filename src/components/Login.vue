@@ -1,13 +1,14 @@
 <template>
-  <div class="login">
-    <el-input v-model="username" placeholder="请输入用户名"/>
-    <el-input v-model="password" placeholder="请输入密码" show-password/>
-    <el-button id="login_button" type="primary" @click="login()">立即登录</el-button>
-    <router-link to="/reg">
-      <el-link id="reg_link" :underline="false" type="primary">没有账号,去注册?</el-link>
-    </router-link>
+  <div class="login-container">
+    <div class="login">
+      <el-input v-model="username" placeholder="请输入用户名"/>
+      <el-input v-model="password" placeholder="请输入密码" show-password/>
+      <el-button id="login_button" type="primary" @click="login()">立即登录</el-button>
+      <router-link to="/reg">
+        <el-link id="reg_link" :underline="false" type="primary">没有账号,去注册?</el-link>
+      </router-link>
+    </div>
   </div>
-
 </template>
 
 <script>
@@ -65,17 +66,25 @@
 </script>
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
-<style>
+<style scoped>
   .login {
+    text-align: center;
     width: 300px;
-    margin: 250px auto 0 auto;
   }
   #login_button {
     width: 300px;
     margin-top: 10px;
   }
   #reg_link {
-    width: 300px;
     margin-top: 10px;
+  }
+  .login-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 100vw;
+    height: 100vh;
+    background: url("../assets/images/background.jpeg") no-repeat center center;
+    background-size: cover;
   }
 </style>

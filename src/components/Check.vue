@@ -1,8 +1,8 @@
 <template>
   <div class="check_face">
-    <video id="video" autoplay="autoplay"/>
+    <canvas id="canvas" style="display: none"  width="250" height="150"/>
+    <video id="video" autoplay="autoplay" width="1000" height="600"/>
     <el-button id="take_photo" type="primary" @click="takePhoto()">点击拍照</el-button><br>
-    <canvas id="canvas" style="display: none"/>
   </div>
 </template>
 
@@ -34,14 +34,14 @@
       takePhoto() {
         var canvas = document.getElementById("canvas");
         var ctx = canvas.getContext('2d')
-        ctx.drawImage(video, 0, 0, 100, 100);
+        ctx.drawImage(video, 0, 0, 250, 150)
         var imageData = canvas.toDataURL();
         // 删除base64头信息
         var base64_code = imageData.replace(/^data:image\/\w+;base64,/, "")
         this.upload(base64_code)
       },
       upload(base64_code) {
-        var data = {uid: $route.params.id, base64_code: base64_code}
+        var data = {uid: this.$route.params.id, base64_code: base64_code}
         axios.post(this.check_face_url, data, {headers: {'Content-Type': 'application/json'}})
         .then(response => {
           console.log(response.data)
@@ -54,10 +54,12 @@
   }
 </script>
 
-<style>
-  #video, #canvas {
-    width: 1000px;
-    height: 600px;
-    margin-left: 200px;
+<style scoped>
+  .check_face {
+    text-align: center;
+  }
+  #take_photo {
+    display: block;
+    margin: 0 auto;
   }
 </style>
