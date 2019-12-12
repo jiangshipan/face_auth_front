@@ -32,10 +32,7 @@
         </el-aside>
 
         <el-main>
-            Main
-            <router-link to="/reg">
-              <el-link id="reg_link" :underline="false" type="primary">没有账号,去注册?</el-link>
-            </router-link>
+          <router-view name="his"/>
         </el-main>
       </el-container>
     </el-container>
@@ -53,7 +50,6 @@
     },
     methods: {
       skipToStudent() {
-        alert("hahaha")
         // this.$router.push({ path: '/login' })
       }
     }

@@ -1,8 +1,9 @@
 <template>
-  <div class="check_face">
+  <div class="add_face">
     <canvas id="canvas" style="display: none"  width="250" height="150"/>
     <video id="video" autoplay="autoplay" width="1000" height="600"/>
     <el-button id="take_photo" type="primary" @click="takePhoto()">点击拍照</el-button><br>
+    {{this.$route.params.id}}, {{this.$route.params.face_name}}
   </div>
 </template>
 
@@ -71,7 +72,7 @@
 </script>
 
 <style scoped>
-  .check_face {
+  .add_face {
     text-align: center;
   }
   #take_photo {
