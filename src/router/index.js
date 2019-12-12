@@ -26,7 +26,18 @@ export default new Router({
     {
       path: '/main',
       name: 'Main',
-      component: Main
+      component: Main,
+      children: [
+        {
+          path: '/record',
+          name: 'record',
+          component: Login
+        },
+        {
+          path: '/student-list',
+          name: 'student-list',
+          component: Login
+        }]
     },
     {
       path: '/face/check/:id',

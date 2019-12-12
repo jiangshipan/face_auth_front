@@ -20,19 +20,19 @@
             background-color="#545c64"
             text-color="#fff"
             active-text-color="#ffd04b">
-            <el-menu-item index="1" @click="skipToStudent()">
+            <el-menu-item index="1">
               <i class="el-icon-user-solid"></i>
-              <span slot="title">学生列表</span>
+              <router-link tag="span" slot="title" to="/student-list">学生列表</router-link>
             </el-menu-item>
             <el-menu-item index="2">
               <i class="el-icon-notebook-2"></i>
-              <span slot="title">签到记录</span>
+              <router-link tag="span" slot="title" to="/record">签到记录</router-link>
             </el-menu-item>
           </el-menu>
         </el-aside>
 
         <el-main>
-          <router-view name="his"/>
+          <router-view/>
         </el-main>
       </el-container>
     </el-container>
@@ -49,9 +49,7 @@
       }
     },
     methods: {
-      skipToStudent() {
-        // this.$router.push({ path: '/login' })
-      }
+      
     }
   }
 </script>
@@ -64,6 +62,9 @@
   .el-aside {
     text-align: center;
     background-color: #545c64
+  }
+  .el-main {
+    padding: 0px;
   }
   .user-side {
     position:absolute;
