@@ -7,6 +7,7 @@ import Register from "../components/Register"
 import Input from '../components/Input'
 import FaceAdd from '../components/FaceAdd'
 import Error from "../components/Error"
+import Student from "../components/Student"
 
 
 Vue.use(Router)
@@ -34,9 +35,9 @@ export default new Router({
           component: Login
         },
         {
-          path: '/student-list',
-          name: 'student-list',
-          component: Login
+          path: '/student',
+          name: 'student',
+          component: Student
         }]
     },
     {
