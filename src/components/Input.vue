@@ -1,7 +1,8 @@
 <template>
   <div class="input-container">
     <div class="input_face">
-    <el-input v-model="face_name" placeholder="请输入你的姓名"></el-input>
+      <el-input v-model="face_name" placeholder="请输入你的姓名"></el-input>
+      <el-input v-model="face_class" placeholder="请输入你的专业班级"></el-input>
       <el-button id="check_button" type="primary" @click="checkInput()">确定</el-button>
     </div>
   </div>    
@@ -12,14 +13,20 @@
     data() {
       return {
         face_name: '',
+        face_class: ''
       }
     },
     methods: {
       checkInput() {
-        if (this.face_name == '') {
-          this.errorMsg('姓名不能为空');
+        if (this.face_name == '' || this.face_class == '') {
+          this.errorMsg('相关参数不能为空');
         } else {
-          this.$router.push({ name: 'FaceAdd', params: {id: this.$route.params.id, face_name: this.face_name}})
+          var params = {
+            id: this.$route.params.id, 
+            face_name: this.face_name, 
+            face_class: this.face_class
+          }
+          this.$router.push({ name: 'FaceAdd', params: params})
         }
       },
       errorMsg(msg) {

@@ -3,7 +3,6 @@
     <canvas id="canvas" style="display: none"  width="250" height="150"/>
     <video id="video" autoplay="autoplay" width="1000" height="600"/>
     <el-button id="take_photo" type="primary" @click="takePhoto()">点击拍照</el-button><br>
-    {{this.$route.params.id}}, {{this.$route.params.face_name}}
   </div>
 </template>
 
@@ -11,10 +10,10 @@
   import axios from 'axios'
   import {base_url} from "../assets/js/base";
   export default {
-    name: 'Check',
+    name: 'FaceAdd',
     data() {
       return {
-        check_face_url: base_url + 'face/search'
+        add_face_url: base_url + 'face/add'
       }
     },
     mounted() {
@@ -42,8 +41,14 @@
         this.upload(base64_code)
       },
       upload(base64_code) {
-        var data = {uid: this.$route.params.id, base64_code: base64_code}
-        axios.post(this.check_face_url, data, {headers: {'Content-Type': 'application/json'}})
+        var data = {
+          uid: this.$route.params.id, 
+          face_name: this.$route.params.face_name, 
+          face_class: this.$route.params.face_class,
+          base64_code: base64_code
+        }
+        console.log(data)
+        axios.post(this.add_face_url, data, {headers: {'Content-Type': 'application/json'}})
         .then(response => {
           console.log(response.data)
         })
