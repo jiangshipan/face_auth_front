@@ -74,6 +74,9 @@
     display: flex;
     height: 100vh;
   }
+  .el-menu {
+    border-right: none;
+  }
 
 
 </style>
