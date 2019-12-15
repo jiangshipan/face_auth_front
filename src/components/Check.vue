@@ -41,12 +41,18 @@
         this.upload(base64_code)
       },
       upload(base64_code) {
-        var data = {uid: this.$route.params.id, base64_code: base64_code}
+        var data = {user_id: this.$route.params.id, base64_code: base64_code}
         axios.post(this.check_face_url, data, {headers: {'Content-Type': 'application/json'}})
         .then(response => {
-          console.log(response.data)
+          var res = response.data;
+          if (res.code == 0) {
+            this.successMsg('签到成功');
+          } else {
+            this.errorMsg(res.msg);
+          }
         })
         .catch(error => {
+          console.log(error)
           this.errorMsg('网络错误,暂时不能访问')
         })
       },

@@ -42,7 +42,7 @@
       },
       upload(base64_code) {
         var data = {
-          uid: this.$route.params.id, 
+          user_id: this.$route.params.id, 
           face_name: this.$route.params.face_name, 
           face_class: this.$route.params.face_class,
           base64_code: base64_code
@@ -50,7 +50,13 @@
         console.log(data)
         axios.post(this.add_face_url, data, {headers: {'Content-Type': 'application/json'}})
         .then(response => {
-          console.log(response.data)
+          var res = response.data;
+          if (res.code == 0) {
+            this.successMsg('录入成功')
+          } else {
+            this.errorMsg(res.msg);
+          }
+          console.log(res)
         })
         .catch(error => {
           this.errorMsg('网络错误,暂时不能访问')
