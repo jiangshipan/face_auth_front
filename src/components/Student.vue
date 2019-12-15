@@ -18,14 +18,15 @@
         <el-table :data="studentList" style="width: 100%" border>
             <el-table-column prop="id" label="id" width="180" align="center"></el-table-column>
             <el-table-column prop="name" label="学生姓名" width="180" align="center"></el-table-column>
+            <el-table-column prop="stu_class" label="专业班级" width="180" align="center"></el-table-column>
             <el-table-column prop="belong" label="教师姓名" align="center"></el-table-column>
             <el-table-column label="人脸照片" align="center">
                 <el-link type="primary">查看人脸</el-link>
             </el-table-column>
             <el-table-column label="签到状态" align="center">
                 <template slot-scope="scope">
-                    <p v-if="scope.row.status == 0" style="color:#67C23A">已签到</p>
-                    <p v-if="scope.row.status == 1" style="color:#F56C6C">未签到</p>
+                    <p v-if="scope.row.status == 1" style="color:#67C23A">已签到</p>
+                    <p v-if="scope.row.status == 0" style="color:#F56C6C">未签到</p>
                 </template>
             </el-table-column>
             <el-table-column label="操作" align="center">
@@ -36,6 +37,11 @@
 </template>
 
 <script>
+import axios from 'axios'
+import {base_url} from "../assets/js/base";
+axios.defaults.withCredentials =true;
+
+
 export default {
     name: 'Student',
     data() {
@@ -43,39 +49,51 @@ export default {
             input: '',
             stu_class: '',
             stu_status: '',
-            studentList: [{
-                id: 1,
-                name: '江时盼',
-                url: 'www.baidu.com',
-                belong: '尚小林',
-                status: 0
-            },
-            {
-                id: 2,
-                name: '张治宇',
-                url: 'www.baidu.com',
-                belong: '尚小林',
-                status: 0
-            },{
-                id: 3,
-                name: '王冰',
-                url: 'www.baidu.com',
-                belong: '尚小林',
-                status: 1
-            }],
+            studentList: [],
             studentClass: [
                 '计科1606', '计科1607', '软件1601'
             ],
             studentStatus: [
                 {
                     value: 0,
-                    label: '已签到'
+                    label: '未签到'
                 },{
                     value: 1,
-                    label: '未签到'
+                    label: '已签到'
                 }
-            ]
+            ],
+            get_stus_url: base_url + 'face/get'
         }
+    },
+    mounted() {
+        axios.get(this.get_stus_url)
+        .then(response => {
+            var res = response.data;
+            this.studentList = res.data;
+            console.log(res)
+        })
+        .catch(error => {
+            this.errorMsg("网络错误, 暂时不能访问")
+        }) 
+
+    },
+    methods: {
+      successMsg(msg) {
+        this.$message({
+          showClose: true,
+          message: msg,
+          type: 'success',
+          duration: 2000
+        });
+      },
+      errorMsg(msg) {
+        this.$message({
+          showClose: true,
+          message: msg,
+          type: 'error',
+          duration: 2000
+        });
+      }
     }
 }
 </script>
