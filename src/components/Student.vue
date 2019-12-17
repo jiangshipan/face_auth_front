@@ -1,7 +1,7 @@
 <template>
     <div class="student">
         <div class="input-container">
-            <el-input class="stu_name" v-model="input" placeholder="请输入姓名"></el-input>
+            <el-input class="stu_name" v-model="face_name" placeholder="请输入姓名"></el-input>
             <el-select class="stu_class" v-model="stu_class" placeholder="请选择班级" clearable>
                 <el-option
                 v-for="item in studentClass" :key="item" :label="item" :value="item">
@@ -13,7 +13,7 @@
                 </el-option>
             </el-select>
 
-            <el-button class="search" type="primary">搜索</el-button>
+            <el-button class="search" type="primary" @click="get_student_list()">搜索</el-button>
         </div>
         <el-table :data="studentList" style="width: 100%" border>
             <el-table-column prop="id" label="id" width="180" align="center"></el-table-column>
@@ -46,7 +46,7 @@ export default {
     name: 'Student',
     data() {
         return {
-            input: '',
+            face_name: '',
             stu_class: '',
             stu_status: '',
             studentList: [],
@@ -78,6 +78,27 @@ export default {
 
     },
     methods: {
+      get_student_list() {
+        var url = this.get_stus_url + '?1=1';
+        if (this.face_name != '') {
+            url += '&face_name=' + this.face_name;
+        } 
+        if (this.stu_class != '') {
+            url += '&stu_class=' + this.stu_class;
+        }
+        if (this.stu_status != '') {
+            url += '&status=' + this.stu_status;
+        }
+        axios.get(url)
+        .then(response => {
+            var res = response.data;
+            this.studentList = res.data;
+            console.log(res)
+        })
+        .catch(error => {
+            this.errorMsg("网络错误, 暂时不能访问")
+        }) 
+      },
       successMsg(msg) {
         this.$message({
           showClose: true,

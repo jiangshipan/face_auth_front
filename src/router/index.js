@@ -8,7 +8,7 @@ import Input from '../components/Input'
 import FaceAdd from '../components/FaceAdd'
 import Error from "../components/Error"
 import Student from "../components/Student"
-
+import Record from "../components/Record"
 
 Vue.use(Router)
 
@@ -32,7 +32,7 @@ export default new Router({
         {
           path: '/record',
           name: 'record',
-          component: Login
+          component: Record
         },
         {
           path: '/student',
