@@ -9,6 +9,7 @@ import FaceAdd from '../components/FaceAdd'
 import Error from "../components/Error"
 import Student from "../components/Student"
 import Record from "../components/Record"
+import ManageClass from "../components/ManageClass"
 
 Vue.use(Router)
 
@@ -38,6 +39,10 @@ export default new Router({
           path: '/student',
           name: 'student',
           component: Student
+        },{
+          path: '/manage_class',
+          name: 'manage_class',
+          component: ManageClass
         }]
     },
     {

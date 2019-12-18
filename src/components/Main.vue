@@ -21,10 +21,14 @@
             text-color="#fff"
             active-text-color="#ffd04b">
             <el-menu-item index="1">
-              <i class="el-icon-user-solid"></i>
+              <i class="el-icon-user"></i>
               <router-link tag="span" slot="title" to="/student">学生列表</router-link>
             </el-menu-item>
             <el-menu-item index="2">
+              <i class="el-icon-user-solid"></i>
+              <router-link tag="span" slot="title" to="/manage_class">班级管理</router-link>
+            </el-menu-item>
+            <el-menu-item index="3">
               <i class="el-icon-notebook-2"></i>
               <router-link tag="span" slot="title" to="/record">签到记录</router-link>
             </el-menu-item>

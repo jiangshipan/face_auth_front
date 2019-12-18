@@ -12,7 +12,6 @@
                 v-for="item in studentStatus" :key="item.value" :label="item.label" :value="item.value">
                 </el-option>
             </el-select>
-
             <el-button class="search" type="primary" @click="get_student_list()">搜索</el-button>
         </div>
         <el-table :data="studentList" style="width: 100%" border>

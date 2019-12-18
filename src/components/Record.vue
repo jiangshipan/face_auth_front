@@ -9,7 +9,11 @@
             <el-button class="search" type="primary" @click="get_reocrd_list()">搜索</el-button>
         </div>
         <el-table :data="recordList" style="width: 100%" border>
-            <el-table-column prop="id" label="id" width="180" align="center"></el-table-column>
+            <el-table-column label="id" width="180" align="center">
+              <template slot-scope="scope">
+                    <span>{{(page - 1) * pageSize + scope.$index + 1}}</span>
+              </template>
+            </el-table-column>
             <el-table-column prop="user_id" label="教师姓名" width="180" align="center"></el-table-column>
             <el-table-column prop="pro_class" label="专业班级" align="center"></el-table-column>
             <el-table-column prop="unchecked" label="未签到学生" align="center"></el-table-column>
@@ -28,6 +32,8 @@ export default {
     name: 'Record',
     data() {
         return {
+            page: 1,
+            pageSize: 10,
             face_name: '',
             pro_class: '',
             recordList: [],
