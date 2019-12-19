@@ -38,6 +38,42 @@ export default {
         }
     },
     mounted() {
+        this.get_class_list()
+    },
+    methods: { 
+      start_check(stu_class) {
+          axios.get(this.start_check_url + '?stu_class=' + stu_class)
+          .then(response => {
+            var res = response.data;
+            if (res.code == 0) {
+                this.successMsg(stu_class + '已开始签到');
+                this.class_list.length = 0;
+                this.get_class_list();
+            } else {
+                this.errorMsg(res.msg);
+            }
+          })
+          .catch(error => {
+            this.errorMsg('网络错误, 暂时不能访问')
+          })
+      },
+      end_check(stu_class) {
+        axios.get(this.end_check_url + '?stu_class=' + stu_class)
+        .then(response => {
+            var res = response.data;
+            if (res.code == 0) {
+                this.successMsg(stu_class + '已结束签到');
+                this.class_list.length = 0;
+                this.get_class_list();
+            } else {
+                this.errorMsg(res.msg);
+            }
+        })
+        .catch(error => {
+            this.errorMsg('网络错误, 暂时不能访问')
+        })
+      },
+      get_class_list() {
         axios.get(this.get_class_url)
         .then(response => {
             var res = response.data.data;
@@ -58,37 +94,6 @@ export default {
             const map = new Map(Object.entries(res.sum))
             for (var i = 0; i < this.class_list.length; i ++) {
                 this.class_list[i].total = map.get(this.class_list[i].pro_class);
-            }
-        })
-        .catch(error => {
-            this.errorMsg('网络错误, 暂时不能访问')
-        })
-    },
-    methods: { 
-      start_check(stu_class) {
-          axios.get(this.start_check_url + '?stu_class=' + stu_class)
-          .then(response => {
-            var res = response.data;
-            if (res.code == 0) {
-                this.successMsg(stu_class + '已开始签到');
-                this.reload()
-            } else {
-                this.errorMsg(res.msg);
-            }
-          })
-          .catch(error => {
-            this.errorMsg('网络错误, 暂时不能访问')
-          })
-      },
-      end_check(stu_class) {
-        axios.get(this.end_check_url + '?stu_class=' + stu_class)
-        .then(response => {
-            var res = response.data;
-            if (res.code == 0) {
-                this.successMsg(stu_class + '已结束签到');
-                this.reload()
-            } else {
-                this.errorMsg(res.msg);
             }
         })
         .catch(error => {
