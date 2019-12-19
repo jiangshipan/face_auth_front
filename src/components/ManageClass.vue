@@ -7,8 +7,12 @@
                 </template>
             </el-table-column>
             <el-table-column prop="pro_class" label="专业班级" align="center"></el-table-column>
-            <el-table-column prop="options" label="操作" align="center">
-                <el-button class="start_check" type="primary">开始签到</el-button>
+            <el-table-column prop="total" label="班级人数" align="center"></el-table-column>
+            <el-table-column label="操作" align="center">
+                <template slot-scope="scope">
+                    <el-button v-if="scope.row.status == 0" class="start_check" type="primary" @click="start_check(scope.row.pro_class)">开始签到</el-button>
+                    <el-button v-if="scope.row.status == 1" class="start_check" type="primary" @click="end_check(scope.row.pro_class)">结束签到</el-button>
+                </template>
             </el-table-column>
         </el-table>
     </div>
@@ -17,20 +21,97 @@
 <script>
 import axios from 'axios'
 import {base_url} from "../assets/js/base";
-axios.defaults.withCredentials =true;
+axios.defaults.withCredentials = true;
 
 
 export default {
     name: 'ManageClass',
+    inject: ['reload'],
     data() {
         return {
             page: 1,
             pageSize: 10,
-            class_list: [{
-                'pro_class': '计科1606',
-            }]
+            class_list: [],
+            get_class_url: base_url + 'face/get_class',
+            start_check_url: base_url + 'face/start',
+            end_check_url: base_url + 'face/end'
         }
     },
+    mounted() {
+        axios.get(this.get_class_url)
+        .then(response => {
+            var res = response.data.data;
+            var checked = res.checked;
+            var unchecked = res.unchecked;
+            for (var i = 0; i < checked.length; i ++) {  
+                this.class_list.push({
+                    'pro_class': checked[i],
+                    'status': 1
+                });
+            }
+            for (var i = 0; i < unchecked.length; i ++) {
+                this.class_list.push({
+                    'pro_class': unchecked[i],
+                    'status': 0
+                });
+            }
+            const map = new Map(Object.entries(res.sum))
+            for (var i = 0; i < this.class_list.length; i ++) {
+                this.class_list[i].total = map.get(this.class_list[i].pro_class);
+            }
+        })
+        .catch(error => {
+            this.errorMsg('网络错误, 暂时不能访问')
+        })
+    },
+    methods: { 
+      start_check(stu_class) {
+          axios.get(this.start_check_url + '?stu_class=' + stu_class)
+          .then(response => {
+            var res = response.data;
+            if (res.code == 0) {
+                this.successMsg(stu_class + '已开始签到');
+                this.reload()
+            } else {
+                this.errorMsg(res.msg);
+            }
+          })
+          .catch(error => {
+            this.errorMsg('网络错误, 暂时不能访问')
+          })
+      },
+      end_check(stu_class) {
+        axios.get(this.end_check_url + '?stu_class=' + stu_class)
+        .then(response => {
+            var res = response.data;
+            if (res.code == 0) {
+                this.successMsg(stu_class + '已结束签到');
+                this.reload()
+            } else {
+                this.errorMsg(res.msg);
+            }
+        })
+        .catch(error => {
+            this.errorMsg('网络错误, 暂时不能访问')
+        })
+      },
+      successMsg(msg) {
+        this.$message({
+          showClose: true,
+          message: msg,
+          type: 'success',
+          duration: 2000
+        });
+      },
+      errorMsg(msg) {
+        this.$message({
+          showClose: true,
+          message: msg,
+          type: 'error',
+          duration: 2000
+        });
+      }
+    }
 }
 </script>
 

@@ -25,7 +25,7 @@
 <script>
 import axios from 'axios'
 import {base_url} from "../assets/js/base";
-axios.defaults.withCredentials =true;
+axios.defaults.withCredentials = true;
 
 
 export default {
@@ -64,7 +64,6 @@ export default {
         .then(response => {
             var res = response.data;
             this.recordList = res.data;
-            console.log(res)
         })
         .catch(error => {
             this.errorMsg("网络错误, 暂时不能访问")

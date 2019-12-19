@@ -29,7 +29,11 @@
                 </template>
             </el-table-column>
             <el-table-column label="操作" align="center">
-                <el-link type="danger">删除</el-link>
+                <template slot-scope="scope">
+                    <el-button class="not_in" v-if="scope.row.status == 1" type="danger">未到场</el-button>
+                    <el-button class="in" v-if="scope.row.status == 0" type="success">已到场</el-button>
+                    <el-button class="delete" type="danger">删除</el-button>
+                </template>
             </el-table-column>
         </el-table>
     </div>
@@ -132,6 +136,9 @@ export default {
   .stu_name, .stu_class, .stu_status {
       width: 300px;
       margin-right: 5px;
+  }
+  .delete, .not_in, .in {
+      width: 80px;
   }
 
 </style>
