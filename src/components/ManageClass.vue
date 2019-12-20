@@ -26,7 +26,6 @@ axios.defaults.withCredentials = true;
 
 export default {
     name: 'ManageClass',
-    inject: ['reload'],
     data() {
         return {
             page: 1,
@@ -79,6 +78,10 @@ export default {
             var res = response.data.data;
             var checked = res.checked;
             var unchecked = res.unchecked;
+            if (response.data.code != 0) {
+                this.errorMsg(response.data.msg);
+                return;
+            }
             for (var i = 0; i < checked.length; i ++) {  
                 this.class_list.push({
                     'pro_class': checked[i],

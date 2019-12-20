@@ -6,8 +6,10 @@
           <span class="el-dropdown-link">
             你好 {{username}}<i class="el-icon-arrow-down el-icon--right"></i>
           </span>
-          <el-dropdown-menu slot="dropdown" >
-            <el-dropdown-item v-for="user_op in user_ops" :key="user_op">{{user_op}}</el-dropdown-item>
+          <el-dropdown-menu slot="dropdown" @click="doOption('sss')">
+              <el-dropdown-item @click.native="changePassword()">修改密码</el-dropdown-item>
+              <el-dropdown-item @click.native="logout()">退出</el-dropdown-item>
+            <!-- <el-dropdown-item v-for="user_op in user_ops" :key="user_op">{{user_op}}</el-dropdown-item> -->
           </el-dropdown-menu>
         </el-dropdown>          
       </el-header>
@@ -44,16 +46,63 @@
 </template>
 
 <script>
+  import axios from 'axios'
+  import {base_url} from "../assets/js/base";
+  axios.defaults.withCredentials = true;
   export default {
     name: 'Main',
     data() {
       return {
-        username: 'jiangshipan',
-        user_ops: ['基本资料', '修改密码', '退出']
+        username: '',
+        get_user_url: base_url + 'user/get',
+        logout_url: base_url + 'user/logout'
       }
     },
+    mounted() {
+      this.get_user_info();
+    },
     methods: {
-      
+      get_user_info() {
+        axios.get(this.get_user_url)
+        .then(response => {
+            var res = response.data;
+            if (res.code == 0) {
+              this.username = res.data.username;
+            } else {
+              this.errorMsg(res.msg)
+            }
+        })
+        .catch(error => {
+          this.errorMsg('网络错误, 暂时不能访问')
+        })
+      },
+      logout() {
+        axios.get(this.logout_url)
+        .then(response => {
+          var res = response.data;
+          this.successMsg("注销成功");
+          this.$router.push({ path: '/login' })
+        })
+        .catch(error => {
+          this.errorMsg('网络错误, 暂时不能访问')
+        })
+      },
+      successMsg(msg) {
+        this.$message({
+          showClose: true,
+          message: msg,
+          type: 'success',
+          duration: 2000
+        });
+      },
+      errorMsg(msg) {
+        this.$message({
+          showClose: true,
+          message: msg,
+          type: 'error',
+          duration: 2000
+        });
+      }
     }
   }
 </script>

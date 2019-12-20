@@ -9,16 +9,25 @@
             <el-button class="search" type="primary" @click="get_reocrd_list()">搜索</el-button>
         </div>
         <el-table :data="recordList" style="width: 100%" border>
-            <el-table-column label="id" width="180" align="center">
+            <el-table-column label="序号" width="180" align="center">
               <template slot-scope="scope">
-                    <span>{{(page - 1) * pageSize + scope.$index + 1}}</span>
+                    <span>{{(currentPage - 1) * pageSize + scope.$index + 1}}</span>
               </template>
             </el-table-column>
-            <el-table-column prop="user_id" label="教师姓名" width="180" align="center"></el-table-column>
+            <el-table-column prop="belong" label="教师姓名" width="180" align="center"></el-table-column>
             <el-table-column prop="pro_class" label="专业班级" align="center"></el-table-column>
             <el-table-column prop="unchecked" label="未签到学生" align="center"></el-table-column>
             <el-table-column prop="create_time" label="生成时间" align="center"></el-table-column>
         </el-table>
+        <div class="block">
+            <el-pagination 
+            @current-change="get_reocrd_list" 
+            :current-page.sync="currentPage"
+            :page-size="pageSize"
+            layout="total, prev, pager, next, jumper"
+            :total="totalNum">
+            </el-pagination>
+        </div>
     </div>
 </template>
 
@@ -32,8 +41,9 @@ export default {
     name: 'Record',
     data() {
         return {
-            page: 1,
+            currentPage: 1,
             pageSize: 10,
+            totalNum: 1,
             face_name: '',
             pro_class: '',
             recordList: [],
@@ -44,28 +54,31 @@ export default {
         }
     },
     mounted() {
-        axios.get(this.get_record_url)
-        .then(response => {
-            var res = response.data;
-            this.recordList = res.data;
-            console.log(res)
-        })
-        .catch(error => {
-            this.errorMsg("网络错误, 暂时不能访问")
-        }) 
+        this.get_reocrd_list()
     },
     methods: {
       get_reocrd_list() {
-        var url = this.get_record_url + '?1=1';
+        var url = this.get_record_url + '?page=' + this.currentPage;
         if (this.pro_class != '') {
             url += '&pro_class=' + this.pro_class;
         }
         axios.get(url)
         .then(response => {
             var res = response.data;
-            this.recordList = res.data;
+            if (res.code != 0) {
+                this.errorMsg(response.data.msg);
+                return;
+            }
+            this.recordList = res.data.data;
+            for (var i = 0; i < this.recordList.length; i ++) {
+              if (this.recordList[i].unchecked.length == 0) {
+                this.recordList[i].unchecked.push('无')
+              }
+            }
+            this.totalNum = res.data.total;
         })
         .catch(error => {
+            console.log(error)
             this.errorMsg("网络错误, 暂时不能访问")
         }) 
       },
@@ -99,6 +112,11 @@ export default {
   .search {
       margin-left: 5px;
       width: 95px;
+  }
+  .block {
+    margin: auto;
+    width: 40%;
+    margin-top: 10px;
   }
 
 </style>
