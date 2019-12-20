@@ -2,6 +2,8 @@
   <div class="main">
     <el-container>
       <el-header>
+        <el-link class="el-link1" href="http://localhost:5000/face/redirect/input">录入人脸</el-link>
+        <el-link href="http://localhost:5000/face/redirect/check">人脸签到</el-link>
         <el-dropdown trigger="click" class="user-side">
           <span class="el-dropdown-link">
             你好 {{username}}<i class="el-icon-arrow-down el-icon--right"></i>
@@ -9,7 +11,6 @@
           <el-dropdown-menu slot="dropdown" @click="doOption('sss')">
               <el-dropdown-item @click.native="changePassword()">修改密码</el-dropdown-item>
               <el-dropdown-item @click.native="logout()">退出</el-dropdown-item>
-            <!-- <el-dropdown-item v-for="user_op in user_ops" :key="user_op">{{user_op}}</el-dropdown-item> -->
           </el-dropdown-menu>
         </el-dropdown>          
       </el-header>
@@ -129,6 +130,10 @@
   }
   .el-menu {
     border-right: none;
+  }
+  .el-link1 {
+    padding-left: 30px;
+    padding-right: 30px;
   }
 
 

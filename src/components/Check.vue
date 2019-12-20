@@ -9,6 +9,8 @@
 <script>
   import axios from 'axios'
   import {base_url} from "../assets/js/base";
+  axios.defaults.withCredentials =true;
+
   export default {
     name: 'Check',
     data() {
