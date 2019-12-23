@@ -38,7 +38,7 @@
             this.errorMsg(response.data.msg);
           } else {
             //跳转到主页面
-            this.$router.push({ path: '/main' })
+            this.$router.push({ path: '/student' })
           }
         })
         .catch(error => {

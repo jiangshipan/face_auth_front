@@ -2,13 +2,13 @@
   <div class="main">
     <el-container>
       <el-header>
-        <el-link class="el-link1" href="http://localhost:5000/face/redirect/input">录入人脸</el-link>
-        <el-link href="http://localhost:5000/face/redirect/check">人脸签到</el-link>
+        <el-link class="el-link1" @click="redirect_input()">录入人脸</el-link>
+        <el-link @click="redirect_check()">人脸签到</el-link>
         <el-dropdown trigger="click" class="user-side">
           <span class="el-dropdown-link">
             你好 {{username}}<i class="el-icon-arrow-down el-icon--right"></i>
           </span>
-          <el-dropdown-menu slot="dropdown" @click="doOption('sss')">
+          <el-dropdown-menu slot="dropdown">
               <el-dropdown-item @click.native="changePassword()">修改密码</el-dropdown-item>
               <el-dropdown-item @click.native="logout()">退出</el-dropdown-item>
           </el-dropdown-menu>
@@ -18,7 +18,7 @@
       <el-container>
         <el-aside width="200px">
           <el-menu
-            default-active="2"
+            default-active="1"
             class="el-menu-vertical-demo"
             background-color="#545c64"
             text-color="#fff"
@@ -54,6 +54,7 @@
     name: 'Main',
     data() {
       return {
+        user_id: '',
         username: '',
         get_user_url: base_url + 'user/get',
         logout_url: base_url + 'user/logout'
@@ -68,6 +69,7 @@
         .then(response => {
             var res = response.data;
             if (res.code == 0) {
+              this.user_id = res.data.id;
               this.username = res.data.username;
             } else {
               this.errorMsg(res.msg)
@@ -87,6 +89,15 @@
         .catch(error => {
           this.errorMsg('网络错误, 暂时不能访问')
         })
+      },
+      changePassword() {
+        this.errorMsg('暂不提供修改密码');
+      },
+      redirect_input() {
+        this.$router.push({ path: '/input/' + this.user_id})
+      },
+      redirect_check() {
+        this.$router.push({ path: '/face/check/' + this.user_id})
       },
       successMsg(msg) {
         this.$message({

@@ -24,7 +24,9 @@
             <el-table-column prop="stu_class" label="专业班级" width="180" align="center"></el-table-column>
             <el-table-column prop="belong" label="教师姓名" align="center"></el-table-column>
             <el-table-column label="人脸照片" align="center">
-                <el-link type="primary">查看人脸</el-link>
+                <template slot-scope="scope">
+                    <el-link type="primary" @click="find_face_img(scope.row.url)">查看人脸</el-link>
+                </template>
             </el-table-column>
             <el-table-column label="签到状态" align="center">
                 <template slot-scope="scope">
@@ -68,6 +70,7 @@ export default {
             face_name: '',
             stu_class: '',
             stu_status: '',
+            image_url: '',
             studentList: [],
             studentClass: [],
             studentStatus: [
@@ -148,6 +151,9 @@ export default {
           .catch(error => {
               this.errorMsg('网络错误暂时不能访问')
           })
+      },
+      find_face_img(image_url) {
+          window.open(image_url);
       },
       successMsg(msg) {
         this.$message({
