@@ -10,8 +10,8 @@
             <el-table-column prop="total" label="班级人数" align="center"></el-table-column>
             <el-table-column label="操作" align="center">
                 <template slot-scope="scope">
-                    <el-button v-if="scope.row.status == 0" class="start_check" type="primary" @click="start_check(scope.row.pro_class)">开始签到</el-button>
-                    <el-button v-if="scope.row.status == 1" class="start_check" type="primary" @click="end_check(scope.row.pro_class)">结束签到</el-button>
+                    <el-button v-if="scope.row.status == 0" class="start_check" type="primary" @click="doOption('确认开始签到', scope.row.pro_class, 1)">开始签到</el-button>
+                    <el-button v-if="scope.row.status == 1" class="start_check" type="danger" @click="doOption('确认结束签到', scope.row.pro_class, 2)">结束签到</el-button>
                 </template>
             </el-table-column>
         </el-table>
@@ -102,6 +102,22 @@ export default {
         .catch(error => {
             this.errorMsg('网络错误, 暂时不能访问')
         })
+      },
+      doOption(msg, pro_class, type) {
+        this.$confirm(msg, '提示', {
+          confirmButtonText: '确定',
+          cancelButtonText: '取消',
+          type: 'warning'
+        }).then(() => {
+          if (type == 1) {
+              // 开始签到
+              this.start_check(pro_class);
+          } else {
+              this.end_check(pro_class);
+          }
+        }).catch(() => { 
+          this.successMsg('已取消')     
+        });
       },
       successMsg(msg) {
         this.$message({

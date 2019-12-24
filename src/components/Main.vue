@@ -10,7 +10,7 @@
           </span>
           <el-dropdown-menu slot="dropdown">
               <el-dropdown-item @click.native="changePassword()">修改密码</el-dropdown-item>
-              <el-dropdown-item @click.native="logout()">退出</el-dropdown-item>
+              <el-dropdown-item @click.native="doOption('确认退出吗?')">退出</el-dropdown-item>
           </el-dropdown-menu>
         </el-dropdown>          
       </el-header>
@@ -98,6 +98,17 @@
       },
       redirect_check() {
         this.$router.push({ path: '/face/check/' + this.user_id})
+      },
+      doOption(msg, id, status) {
+        this.$confirm(msg, '提示', {
+          confirmButtonText: '确定',
+          cancelButtonText: '取消',
+          type: 'warning'
+        }).then(() => {
+          this.logout();
+        }).catch(() => {
+          this.successMsg('已取消')     
+        });
       },
       successMsg(msg) {
         this.$message({

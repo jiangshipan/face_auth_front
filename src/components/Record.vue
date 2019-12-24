@@ -47,13 +47,14 @@ export default {
             face_name: '',
             pro_class: '',
             recordList: [],
-            studentClass: [
-                '计科1606', '计科1607', '软件1601'
-            ],
-            get_record_url: base_url + 'record/get'
+            studentClass: [],
+            get_record_url: base_url + 'record/get',
+            get_class_url: base_url + 'face/get_class',
+
         }
     },
     mounted() {
+        this.get_class_list(),
         this.get_reocrd_list()
     },
     methods: {
@@ -81,6 +82,27 @@ export default {
             console.log(error)
             this.errorMsg("网络错误, 暂时不能访问")
         }) 
+      },
+      get_class_list() {
+          axios.get(this.get_class_url)
+          .then(response => {
+              var res = response.data.data;
+              if (response.data.code != 0) {
+                  this.errorMsg(response.data.msg);
+                  return;
+              }
+              var checked = res.checked;
+              var unchecked = res.unchecked;
+              for (var i = 0; i < checked.length; i++) {
+                  this.studentClass.push(checked[i])
+              }
+              for (var i = 0; i < unchecked.length; i++) {
+                  this.studentClass.push(unchecked[i])
+              }
+          })
+          .catch(error => {
+              this.errorMsg('网络错误, 暂时不能访问')
+          })
       },
       successMsg(msg) {
         this.$message({

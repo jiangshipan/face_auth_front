@@ -36,9 +36,9 @@
             </el-table-column>
             <el-table-column label="操作" align="center">
                 <template slot-scope="scope">
-                    <el-button class="not_in" v-if="scope.row.status == 1" type="danger" @click="update_status(scope.row.id, 0)">未到场</el-button>
-                    <el-button class="in" v-if="scope.row.status == 0" type="success" @click="update_status(scope.row.id, 1)">已到场</el-button>
-                    <el-button class="delete" type="danger" @click="update_status(scope.row.id, 2)">删除</el-button>
+                    <el-button class="not_in" v-if="scope.row.status == 1" type="danger" @click="doOption('请确认未到场', scope.row.id, 0)">未到场</el-button>
+                    <el-button class="in" v-if="scope.row.status == 0" type="success" @click="doOption('请确认已经到场', scope.row.id, 1)">已到场</el-button>
+                    <el-button class="delete" type="danger" @click="doOption('此操作将从班级内移除该学生, 是否继续?', scope.row.id, 2)">删除</el-button>
                 </template>
             </el-table-column>
         </el-table>
@@ -144,6 +144,7 @@ export default {
               var res = response.data;
               if (res.code == 0) {
                   this.get_student_list();
+                  this.successMsg('操作成功');
               } else {
                   this.errorMsg(res.msg);
               }
@@ -154,6 +155,17 @@ export default {
       },
       find_face_img(image_url) {
           window.open(image_url);
+      },
+      doOption(msg, id, status) {
+        this.$confirm(msg, '提示', {
+          confirmButtonText: '确定',
+          cancelButtonText: '取消',
+          type: 'warning'
+        }).then(() => {
+          this.update_status(id, status)
+        }).catch(() => {
+          this.successMsg('已取消')     
+        });
       },
       successMsg(msg) {
         this.$message({
