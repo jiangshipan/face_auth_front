@@ -25,10 +25,10 @@
             <el-table-column prop="belong" label="教师姓名" align="center"></el-table-column>
             <el-table-column label="人脸照片" align="center">
                 <template slot-scope="scope">
-                    <el-link type="primary" @click="find_face_img(scope.row.url)">查看人脸</el-link>
+                    <el-link type="primary" @click="open(scope.row.url)">查看人脸</el-link>
                 </template>
             </el-table-column>
-            <el-table-column label="签到状态" align="center">
+            <el-table-column label="签到情况" align="center">
                 <template slot-scope="scope">
                     <p v-if="scope.row.status == 1" style="color:#67C23A">已签到</p>
                     <p v-if="scope.row.status == 0" style="color:#F56C6C">未签到</p>
@@ -153,8 +153,12 @@ export default {
               this.errorMsg('网络错误暂时不能访问')
           })
       },
-      find_face_img(image_url) {
-          window.open(image_url);
+      open(image_url) {
+        var html = '<img src="' + image_url + '"></img>'
+        this.$alert(html, '人脸照片', {
+          dangerouslyUseHTMLString: true,
+          center: true
+        });
       },
       doOption(msg, id, status) {
         this.$confirm(msg, '提示', {

@@ -10,8 +10,9 @@
             <el-table-column prop="total" label="班级人数" align="center"></el-table-column>
             <el-table-column label="操作" align="center">
                 <template slot-scope="scope">
-                    <el-button v-if="scope.row.status == 0" class="start_check" type="primary" @click="doOption('确认开始签到', scope.row.pro_class, 1)">开始签到</el-button>
-                    <el-button v-if="scope.row.status == 1" class="start_check" type="danger" @click="doOption('确认结束签到', scope.row.pro_class, 2)">结束签到</el-button>
+                    <el-button v-if="scope.row.status == 0" type="primary" @click="doOption('确认开始签到', scope.row.pro_class, 1)">开始签到</el-button>
+                    <el-button v-if="scope.row.status == 1" type="danger" @click="doOption('确认结束签到', scope.row.pro_class, 2)">结束签到</el-button>
+                    <el-button type="primary" @click="check_info(scope.row.pro_class, scope.row.status)">签到情况</el-button>
                 </template>
             </el-table-column>
         </el-table>
@@ -117,6 +118,20 @@ export default {
           }
         }).catch(() => { 
           this.successMsg('已取消')     
+        });
+      },
+      check_info(pro_class, status) {
+        if (status == 0) {
+            this.errorMsg('您还未开启签到');
+            return;
+        }
+        var html = '<p>2019-12-24 05:39:51 江时盼 已经签到</p><p>2019-12-24 05:39:51 江时盼 已经签到</p>' +
+         '<p>2019-12-24 05:39:51 江时盼 已经签到</p><p>2019-12-24 05:39:51 江时盼 已经签到</p><p>2019-12-24 05:39:51 江时盼 已经签到</p>' + 
+         '<p>2019-12-24 05:39:51 江时盼 已经签到</p><p>2019-12-24 05:39:51 江时盼 已经签到</p><p>2019-12-24 05:39:51 江时盼 已经签到</p>' + 
+         '<p>2019-12-24 05:39:51 江时盼 已经签到</p><p>2019-12-24 05:39:51 江时盼 已经签到</p><p>2019-12-24 05:39:51 江时盼 已经签到</p><br><p>未签到的还有 王冰 李黎野</p>'
+        this.$alert(html, pro_class + '班 签到情况', {
+          dangerouslyUseHTMLString: true,
+          center: true
         });
       },
       successMsg(msg) {

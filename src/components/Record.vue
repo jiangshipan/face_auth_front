@@ -1,6 +1,8 @@
 <template>
     <div class="student">
         <div class="input-container">
+            <el-date-picker type="date" class="date_start" placeholder="开始日期" v-model="date_start"></el-date-picker>
+            <el-date-picker type="date" class="date_end" placeholder="结束日期" v-model="date_end"></el-date-picker>
             <el-select class="stu_class" v-model="pro_class" placeholder="请选择班级" clearable>
                 <el-option
                 v-for="item in studentClass" :key="item" :label="item" :value="item">
@@ -50,6 +52,8 @@ export default {
             studentClass: [],
             get_record_url: base_url + 'record/get',
             get_class_url: base_url + 'face/get_class',
+            date_start: '',
+            date_end: ''
 
         }
     },
@@ -128,8 +132,12 @@ export default {
   .input-container {
     display: flex;
     justify-content: space-between;
-    width: 300px;
+    width: 1000px;
     margin: 50px 0 10px 0;
+  }
+  .date_start, .date_end, .stu_class {
+    width: 300px;
+    margin-right: 5px;
   }
   .search {
       margin-left: 5px;
