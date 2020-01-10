@@ -19,7 +19,8 @@
             <el-table-column prop="belong" label="教师姓名" width="180" align="center"></el-table-column>
             <el-table-column prop="pro_class" label="专业班级" align="center"></el-table-column>
             <el-table-column prop="unchecked" label="未签到学生" align="center"></el-table-column>
-            <el-table-column prop="create_time" label="生成时间" align="center"></el-table-column>
+            <el-table-column prop="create_time" label="开始时间" align="center"></el-table-column>
+            <el-table-column prop="end_time" label="结束时间" align="center"></el-table-column>
         </el-table>
         <div class="block">
             <el-pagination 
@@ -67,6 +68,18 @@ export default {
         if (this.pro_class != '') {
             url += '&pro_class=' + this.pro_class;
         }
+        if (this.date_start != '' && this.date_start != '1970-01-01') {
+            var str = this.dateToString(new Date(this.date_start))
+            url += '&create_time=' + str;
+        }
+        if (this.date_end != '' && this.date_end != '1970-01-01') {
+            var str = this.dateToString(new Date(this.date_end))
+            url += '&end_time=' + str;
+        }
+        if (new Date(this.date_start).getTime() > new Date(this.date_end).getTime()) {
+          this.errorMsg("开始时间不能大于结束时间");
+          return
+        }
         axios.get(url)
         .then(response => {
             var res = response.data;
@@ -107,6 +120,19 @@ export default {
           .catch(error => {
               this.errorMsg('网络错误, 暂时不能访问')
           })
+      },
+      dateToString(date) {
+        var year = date.getFullYear();
+        var month = (date.getMonth() + 1).toString();
+        var day = (date.getDate()).toString();
+        if (month.length == 1) {
+          month = '0' + month;
+        }
+        if (day.length == 1) {
+          day = '0' + day;
+        }
+        var datetime = year + '-' + month + '-' + day;
+        return datetime;
       },
       successMsg(msg) {
         this.$message({
