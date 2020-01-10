@@ -34,7 +34,8 @@ export default {
             class_list: [],
             get_class_url: base_url + 'face/get_class',
             start_check_url: base_url + 'face/start',
-            end_check_url: base_url + 'face/end'
+            end_check_url: base_url + 'face/end',
+            get_now_record: base_url + 'record/get_now',
         }
     },
     mounted() {
@@ -125,14 +126,31 @@ export default {
             this.errorMsg('您还未开启签到');
             return;
         }
-        var html = '<p>2019-12-24 05:39:51 江时盼 已经签到</p><p>2019-12-24 05:39:51 江时盼 已经签到</p>' +
-         '<p>2019-12-24 05:39:51 江时盼 已经签到</p><p>2019-12-24 05:39:51 江时盼 已经签到</p><p>2019-12-24 05:39:51 江时盼 已经签到</p>' + 
-         '<p>2019-12-24 05:39:51 江时盼 已经签到</p><p>2019-12-24 05:39:51 江时盼 已经签到</p><p>2019-12-24 05:39:51 江时盼 已经签到</p>' + 
-         '<p>2019-12-24 05:39:51 江时盼 已经签到</p><p>2019-12-24 05:39:51 江时盼 已经签到</p><p>2019-12-24 05:39:51 江时盼 已经签到</p><br><p>未签到的还有 王冰 李黎野</p>'
-        this.$alert(html, pro_class + '班 签到情况', {
-          dangerouslyUseHTMLString: true,
-          center: true
-        });
+        var html = ''
+        axios.get(this.get_now_record + '?pro_class=' + pro_class) 
+        .then(response => {
+          var res = response.data.data;
+          for (var i = 0; i < res.checked.length; i ++) {
+            html = html.concat('<p>' + res.checked[i] + '</p>')
+          }
+          if (res.unchecked.length == 0) {
+            html = html.concat('<br><p>所有人已签到完成<p>');
+          } else {
+            html = html.concat('<br><p>未签到的还有 ');
+            for (var i = 0; i < res.unchecked.length; i ++) {
+              html = html.concat(res.unchecked[i])
+            }
+            html = html.concat('</p>');
+          }
+          this.$alert(html, pro_class + '班 签到情况', {
+            dangerouslyUseHTMLString: true,
+            center: true
+          });
+        })
+        .catch(error => {
+          console.log(error)
+          this.errorMsg('网络错误, 暂时不能访问');
+        })
       },
       successMsg(msg) {
         this.$message({
