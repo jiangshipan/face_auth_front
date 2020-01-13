@@ -30,14 +30,15 @@
             </el-table-column>
             <el-table-column label="签到情况" align="center">
                 <template slot-scope="scope">
-                    <p v-if="scope.row.status == 1" style="color:#67C23A">已签到</p>
-                    <p v-if="scope.row.status == 0" style="color:#F56C6C">未签到</p>
+                    <p v-if="scope.row.open_check == 1" style="color:#67C23A">暂未开放签到</p>
+                    <p v-if="scope.row.open_check != 1 && scope.row.status == 1" style="color:#67C23A">已签到</p>
+                    <p v-if="scope.row.open_check != 1 && scope.row.status == 0" style="color:#F56C6C">未签到</p>
                 </template>
             </el-table-column>
             <el-table-column label="操作" align="center">
                 <template slot-scope="scope">
-                    <el-button class="not_in" v-if="scope.row.status == 1" type="danger" @click="doOption('请确认未到场', scope.row.id, 0)">未到场</el-button>
-                    <el-button class="in" v-if="scope.row.status == 0" type="success" @click="doOption('请确认已经到场', scope.row.id, 1)">已到场</el-button>
+                    <el-button class="not_in" v-if="scope.row.open_check != 1 && scope.row.status == 1" type="danger" @click="doOption('请确认未到场', scope.row.id, 0)">未到场</el-button>
+                    <el-button class="in" v-if="scope.row.open_check != 1 && scope.row.status == 0" type="success" @click="doOption('请确认已经到场', scope.row.id, 1)">已到场</el-button>
                     <el-button class="delete" type="danger" @click="doOption('此操作将从班级内移除该学生, 是否继续?', scope.row.id, 2)">删除</el-button>
                 </template>
             </el-table-column>

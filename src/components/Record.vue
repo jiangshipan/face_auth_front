@@ -21,6 +21,11 @@
             <el-table-column prop="unchecked" label="未签到学生" align="center"></el-table-column>
             <el-table-column prop="create_time" label="开始时间" align="center"></el-table-column>
             <el-table-column prop="end_time" label="结束时间" align="center"></el-table-column>
+            <el-table-column label="操作" align="center">
+                <template slot-scope="scope">
+                    <el-button type="primary" @click="check_info(scope.row.pro_class, scope.row.id)">签到情况</el-button>
+                </template>
+            </el-table-column>
         </el-table>
         <div class="block">
             <el-pagination 
@@ -53,6 +58,7 @@ export default {
             studentClass: [],
             get_record_url: base_url + 'record/get',
             get_class_url: base_url + 'face/get_class',
+            get_detail_url: base_url + 'record/get_detail',
             date_start: '',
             date_end: ''
 
@@ -133,6 +139,27 @@ export default {
         }
         var datetime = year + '-' + month + '-' + day;
         return datetime;
+      },
+      check_info(pro_class, id) {
+        var html = ''
+        axios.get(this.get_detail_url + '?id=' + id) 
+        .then(response => {
+          var res = response.data.data;
+          if (res.checked.length == 0) {
+            html = html.concat('<p>暂无签到记录</p>');
+          }
+          for (var i = 0; i < res.checked.length; i ++) {
+            html = html.concat('<p>' + res.checked[i] + '</p>')
+          }
+          this.$alert(html, pro_class + '班 签到情况', {
+            dangerouslyUseHTMLString: true,
+            center: true
+          });
+        })
+        .catch(error => {
+          console.log(error)
+          this.errorMsg('网络错误, 暂时不能访问');
+        })
       },
       successMsg(msg) {
         this.$message({
